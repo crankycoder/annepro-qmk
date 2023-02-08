@@ -9,3 +9,7 @@
 
 // set delay to 200ms for key hold
 #define TAPPING_TERM 200
+
+// Enable all the effects
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#define RGB_MATRIX_KEYPRESSES
