@@ -62,7 +62,7 @@ enum anne_pro_layers {
     KC_TAB                  , KC_Q      , KC_W                  , KC_E              , KC_R, KC_T, KC_Y,   KC_U, KC_I, KC_O,    KC_P,             KC_LBRC,          KC_RBRC,       KC_BSLS,
     MT(MOD_LGUI, KC_ESC)    , KC_A      , KC_S                  , KC_D              , KC_F, KC_G, KC_H, KC_J, KC_K,    KC_L,   KC_SCLN, KC_QUOT, KC_ENT,
     SC_LSPO                 , KC_Z      , KC_X                  , KC_C              , KC_V, KC_B,   KC_N, KC_M, KC_COMM, KC_DOT,           KC_SLSH,          SC_RSPC,
-    TD(TD_LCTL_CTRL_PGUP)   , KC_LGUI   , KC_LALT               , LT(FN1, KC_SPC)   , KC_RALT, FN1, FN2, TD(TD_RCTL_CTRL_PGDN)
+    TD(TD_LCTL_CTRL_PGUP)   , KC_LGUI   , KC_LALT               , LT(FN1, KC_SPC)   , KC_RALT, MO(FN1), LT(FN2 , KC_RGUI), TD(TD_RCTL_CTRL_PGDN)
 ),
   /*
   * Layer FN1
