@@ -13,3 +13,14 @@
 // Enable all the effects
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_MATRIX_KEYPRESSES
+
+// Enable CAPSWORD with both shifts
+#define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
+
+// Set a timeout to complete a leader sequence
+#define LEADER_TIMEOUT 400
+
+// quit vim mode with :q
+#define VIM_COLON_CMDS
+#define VIM_FOR_ALL
+#define BETTER_VISUAL_MODE

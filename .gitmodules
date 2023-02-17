@@ -21,3 +21,6 @@
 [submodule "lib/pico-sdk"]
 	path = lib/pico-sdk
 	url = https://github.com/qmk/pico-sdk.git
+[submodule "keyboards/annepro2/keymaps/vng/qmk-vim"]
+	path = keyboards/annepro2/keymaps/vng/qmk-vim
+	url = https://github.com/crankycoder/qmk-vim.git
