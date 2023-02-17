@@ -25,3 +25,6 @@
 	path = lib/lvgl
 	url = https://github.com/qmk/lvgl.git
 	branch = release/v8.2
+[submodule "keyboards/annepro2/keymaps/vng/qmk-vim"]
+	path = keyboards/annepro2/keymaps/vng/qmk-vim
+	url = https://github.com/crankycoder/qmk-vim.git

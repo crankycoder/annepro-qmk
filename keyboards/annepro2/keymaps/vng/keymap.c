@@ -15,11 +15,38 @@
   */
 
 #include QMK_KEYBOARD_H
+#include "qmk-vim/src/vim.h"
+
+const ap2_led_t red= {
+    .p.blue  = 0x00,
+    .p.red   = 0xff,
+    .p.green = 0x00,
+    .p.alpha = 0xff,
+};
+
+
+const ap2_led_t green  = {
+    .p.blue  = 0x00,
+    .p.red   = 0x00,
+    .p.green = 0xff,
+    .p.alpha = 0xff,
+};
+
+const ap2_led_t blue = {
+    .p.blue  = 0xff,
+    .p.red   = 0x00,
+    .p.green = 0x00,
+    .p.alpha = 0xff,
+};
 
 enum {
     TD_LCTL_CTRL_PGUP,
     TD_RCTL_CTRL_PGDN,
     TD_LCAPS_CAPSLOCK,
+};
+
+enum custom_keycodes {
+    TOG_VIM = SAFE_RANGE,
 };
 
 
@@ -82,7 +109,7 @@ enum anne_pro_layers {
   */
  [FN1] = LAYOUT_60_ansi( /* FN1 */
     KC_ESC          , KC_F1     ,   KC_F2   , KC_F3     ,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,
-    _______         , _______   , _______   , _______   , _______, _______, _______, _______, _______, _______, _______, _______, _______,  _______,
+    _______         , _______   , _______   , _______   , _______, _______, _______, _______, _______, _______, _______, _______, _______,  KC_LEAD,
     TD(TD_LCAPS_CAPSLOCK), _______, _______ , _______   , _______, _______, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, _______, _______, _______,
     _______         , KC_VOLD   , KC_VOLU   , KC_MUTE   , _______, _______, _______, _______, _______, _______, KC_UP, _______,
     _______         , _______, _______  ,                            _______,                   KC_LEFT, KC_DOWN, KC_RIGHT, _______ 
@@ -114,14 +141,16 @@ enum anne_pro_layers {
 
 void keyboard_post_init_user(void) {
     ap2_led_enable();
+
+    // Set the profile to heatmap
     ap2_led_set_profile(7);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case FN1:
-            // Set the leds to green
-            ap2_led_set_foreground_color(0x00, 0xFF, 0x00);
+            // Set the leds to red
+            ap2_led_set_foreground_color(0xFF, 0x00, 0x00);
             break;
         case FN2:
             // Set the leds to blue
@@ -152,9 +181,60 @@ bool led_update_user(led_t leds) {
     return true;
 }
 
+
+
 qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_LCTL_CTRL_PGUP] = ACTION_TAP_DANCE_DOUBLE(KC_LCTL, LCTL(KC_PGUP)),
     [TD_RCTL_CTRL_PGDN] = ACTION_TAP_DANCE_DOUBLE(KC_RCTL, RCTL(KC_PGDN)),
     [TD_LCAPS_CAPSLOCK] = ACTION_TAP_DANCE_DOUBLE(KC_LGUI, KC_CAPS_LOCK)
 };
+
+
+/**
+ *
+ * vim configuration below
+ *
+ **/
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (vim_mode_enabled()) {
+        // Yellow for vim
+        ap2_led_set_foreground_color(0xFF, 0xFD, 0x37);
+    } else {
+        // Reset back to the current profile
+        ap2_led_reset_foreground_color();
+    }
+
+    // Process case modes
+    if (!process_vim_mode(keycode, record)) {
+        return false;
+    }
+
+    // Regular user keycode case statement
+    return true;
+}
+
+
+
+LEADER_EXTERNS();
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    // Replace the sequences below with your own sequences.
+
+    SEQ_ONE_KEY(KC_F) {
+      // When I press KC_LEAD and then V, this toggles vim mode
+      // for windows and linux
+      disable_vim_for_mac();
+      toggle_vim_mode();
+      ap2_led_blink(0, 0, blue, 5, 20);
+    };
+    SEQ_TWO_KEYS(KC_F, KC_F) {
+      // When I press KC_LEAD and then F twice for vim in mac mode
+      enable_vim_for_mac();
+      ap2_led_blink(0, 0, red, 5, 20);
+    };
+  }
+}
 
