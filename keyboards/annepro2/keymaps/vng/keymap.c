@@ -195,14 +195,22 @@ qk_tap_dance_action_t tap_dance_actions[] = {
  * vim configuration below
  *
  **/
+
+void set_vim_led(void) {
+    rgb_matrix_mode_noeeprom(RGB_MATRIX_RAINBOW_MOVING_CHEVRON);
+}
+
+void reset_vim_led(void) {
+    rgb_matrix_reload_from_eeprom();
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (vim_mode_enabled()) {
-        // Jellybean raindrops in vim mode
-        rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
+        set_vim_led();
     } else {
         // Reset back to the current profile
         ap2_led_reset_foreground_color();
-        rgb_matrix_reload_from_eeprom();
+        reset_vim_led();
     }
 
     // Process case modes
@@ -230,15 +238,14 @@ void matrix_scan_user(void) {
       disable_vim_for_mac();
       toggle_vim_mode();
       ap2_led_blink(0, 0, blue, 5, 20);
-      // Jellybean raindrops in vim mode
-      rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
+      set_vim_led();
     };
     SEQ_TWO_KEYS(KC_F, KC_F) {
       // When I press KC_LEAD and then F twice for vim in mac mode
       enable_vim_for_mac();
+      toggle_vim_mode();
       ap2_led_blink(0, 0, red, 5, 20);
-      // Jellybean raindrops in vim mode
-      rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
+      set_vim_led();
     };
   }
 }
