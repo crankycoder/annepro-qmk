@@ -143,7 +143,7 @@ void keyboard_post_init_user(void) {
     ap2_led_enable();
 
     // Set the profile to heatmap
-    ap2_led_set_profile(7);
+    rgb_matrix_mode(RGB_MATRIX_TYPING_HEATMAP);
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
@@ -197,11 +197,12 @@ qk_tap_dance_action_t tap_dance_actions[] = {
  **/
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (vim_mode_enabled()) {
-        // Yellow for vim
-        ap2_led_set_foreground_color(0xFF, 0xFD, 0x37);
+        // Jellybean raindrops in vim mode
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
     } else {
         // Reset back to the current profile
         ap2_led_reset_foreground_color();
+        rgb_matrix_reload_from_eeprom();
     }
 
     // Process case modes
@@ -229,11 +230,15 @@ void matrix_scan_user(void) {
       disable_vim_for_mac();
       toggle_vim_mode();
       ap2_led_blink(0, 0, blue, 5, 20);
+      // Jellybean raindrops in vim mode
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
     };
     SEQ_TWO_KEYS(KC_F, KC_F) {
       // When I press KC_LEAD and then F twice for vim in mac mode
       enable_vim_for_mac();
       ap2_led_blink(0, 0, red, 5, 20);
+      // Jellybean raindrops in vim mode
+      rgb_matrix_mode_noeeprom(RGB_MATRIX_JELLYBEAN_RAINDROPS);
     };
   }
 }
